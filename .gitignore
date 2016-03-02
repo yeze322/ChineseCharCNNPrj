@@ -1,0 +1,17 @@
+*.jpg
+*.png
+*.t7
+gradReport/
+!gradReport/scripts
+
+*.caffemodel
+*.solverstate
+
+*.pyc
+*.bin
+caffeworks/data
+
+CharPNGLib/
+traindata/
+
+*.DS_Store

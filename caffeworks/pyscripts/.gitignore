@@ -1,0 +1,8 @@
+._*
+*.pyc
+*.jpg
+*.png
+*.npy
+*.pkl
+*.txt
+test*/
