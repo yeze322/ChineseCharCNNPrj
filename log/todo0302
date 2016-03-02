@@ -1,0 +1,11 @@
+Tonight: after playing basketball, net cut && net paras copy finished!
+Todo: transplant algorithm used in the 'ImageSyn' lib
+Extra: modify the DeepImages lib
+Challenges: what if the algo doesn't work for the model is too simple?
+More: print thoese reference papars
+      think about character edge restrict algorithm
+
+
+DEBUG rec:
+1. lmdb cannot accessed by to net at the same time
+2. paras in a caffe.Net must be assigned in paras[0] level. only change the values of the layer key doesn't work
