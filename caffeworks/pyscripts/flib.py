@@ -14,8 +14,8 @@ def load_obj(fname):
 input: listFileName - file contains 9 fonts' child list
 return: a shuffled/sorted file list collection
 '''
-mnist_re = r'.+_([0-9]).png'
-char_re = r'.+/([a-z]+)_.+jpg'
+RE_MNIST = r'.+_([0-9]).png'
+RE_CH = r'.+/([a-z]+)_.+jpg'
 
 def generateFnameLableTuppleList(inputListName, labelre, labelfunc=None, limit=-1, ifshuffle=True):
     labelDiction = {}

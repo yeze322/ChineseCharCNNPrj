@@ -3,7 +3,7 @@ from optparse import OptionParser
 
 parser = OptionParser()
 parser.add_option("-f", "--file", dest="flistname", default='mnist_list')
-parser.add_option('-d', '--dest', dest='dbname', default='mtest')
+parser.add_option('-d', '--dbname', dest='dbname', default='mtest')
 parser.add_option('-m', '--mode', dest='mode', default='batch')
 
 (opt, args) = parser.parse_args()
@@ -19,8 +19,9 @@ import dblib
 import flib
 import numpy as np
 
+RE = flib.RE_CH
 # start main function
-tuppleList, labelDiction = flib.generateFnameLableTuppleList(opt.flistname, labelre=flib.mnist_re, labelfunc=int)
+tuppleList, labelDiction = flib.generateFnameLableTuppleList(opt.flistname, labelre=RE, labelfunc=int)
 
 MAP_SIZE = 1*36*36*len(tuppleList)*20
 
