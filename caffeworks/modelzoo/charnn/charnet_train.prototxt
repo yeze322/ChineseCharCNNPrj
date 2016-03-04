@@ -7,7 +7,7 @@ layer {
     scale: 0.00392156862745
   }
   data_param {
-    source: "/home/yeze/Desktop/ChineseCharPrj/caffeworks/data/db_font"
+    source: "/home/yeze/Desktop/ChineseCharPrj/caffeworks/data/db_font_3d"
     batch_size: 64
     backend: LMDB
   }

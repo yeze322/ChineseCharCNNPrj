@@ -8,21 +8,21 @@ opsuf = 'testpic/'
 class RETest(unittest.TestCase):
 	def test_re_mnist(self):
 		string = '/home/yeze/Desktop/ChineseCharPrj/caffeworks/data/pngs/0_7.png'
-		ret = re.match(flib.mnist_re, string).groups()
+		ret = re.match(flib.RE_MNIST, string).groups()
 		self.assertEqual(int(ret[0]), 7)
 
 class PicTest(unittest.TestCase):
 	def test_load10filelist(self):
 		ret, dic = flib.generateFnameLableTuppleList(\
-			'../data/mnist_list', labelre=flib.mnist_re, limit=10)
+			'../data/mnist_list', labelre=flib.RE_MNIST, limit=10)
 		self.assertEqual(len(ret), 10)
 
 	def test_readDigitPic(self):
 		pic = piclib.loadPic('digit.png')
 		self.assertEqual(pic.shape, (28,28))
-		self.assertEqual(pic.max(), 1)
+		self.assertEqual(pic.max(), 1.)
 
-		pic_gray = piclib.getGrayChannel(pic)
+		pic_gray = piclib.getScaleChannel(pic)
 		self.assertEqual(pic_gray.max(), 255)
 		self.assertEqual(pic_gray.shape, (28,28))
 
@@ -33,7 +33,7 @@ class PicTest(unittest.TestCase):
 		pic = piclib.loadPic('char.jpg')
 		self.assertEqual(pic.shape, (36,36,3))
 		
-		pic_gray = piclib.getGrayChannel(pic)
+		pic_gray = piclib.getScaleChannel(pic,channels=1)
 		self.assertEqual(pic_gray.shape, (36,36))
 		self.assertEqual(pic_gray.max(), 255)
 

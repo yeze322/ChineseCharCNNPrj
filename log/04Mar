@@ -13,3 +13,7 @@ DONE:
 todo:
 
 error with DB.getindex() fix it 
+
+SOlVED:
+    - refactor getindex() and delete 2 axis import functions
+    - now the data can worked on cuted cnn

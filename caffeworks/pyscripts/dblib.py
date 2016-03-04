@@ -16,7 +16,9 @@ class DB:
 		self.datum = caffe.proto.caffe_pb2.Datum()
 		try:
 			self.labelDiction = flib.load_obj(dbname+'/obj/labelDiction.pkl')
+			print "labelDiction loaded"
 			self.datashape = flib.load_obj(dbname+'/obj/picsize.pkl')
+			print "datashape loaded"
 			self._setDatum()
 			print "Read Mode"
 		except:
@@ -26,10 +28,11 @@ class DB:
 		self.env.close()
 
 	def _setDatum(self):
+		print self.datashape
 		if len(self.datashape) == 2:
 			self.datum.channels = 1
 			self.datum.height, self.datum.width = self.datashape
-		elif len(x.shape) == 3:
+		elif len(self.datashape) == 3:
 			self.datum.channels,self.datum.height,self.datum.width = self.datashape
 		else:
 			raise Exception('data size error:{}'.format(self.datashape))
@@ -45,10 +48,9 @@ class DB:
 
 	def _convertString(self, raw_string):
 		self.datum.ParseFromString(raw_string)
-		mat = np.fromstring(datum.data, dtype=np.uint8)
-		mat = mat.reshape(datum.channels, datum.height, datum.width)
-		label = datum.label
-		return (mat, label)
+		mat = np.fromstring(self.datum.data, dtype=np.uint8)
+		mat = mat.reshape(self.datum.channels, self.datum.height, self.datum.width)
+		return (mat, self.datum.label)
 
 	def getElementTupple(self, index):
 		if index+1 > self.count():
@@ -56,7 +58,7 @@ class DB:
 			return None
 		else:
 			raw_str = self.txn.get('{:08}'.format(index))
-			return _convertString(raw_str)
+			return self._convertString(raw_str)
 
 	# tuppleList : (filename, label), return shape of the data
 	def addTuppleList(self, tplist, startIndex=0, autocommit = True):

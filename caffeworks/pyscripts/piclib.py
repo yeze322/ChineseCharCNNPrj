@@ -19,15 +19,23 @@ def savePic(fname, matrix, mode=None):
     img.save(fname)
     return
 
-def getScaleChannel(pic, scale=255, channels=[0,1,2]):
-    pic *= scale/pic.max()
-    pic = pic.astype(np.uint8)
-    if len(pic.shape) == 2:
-        return pic
+def getScaleChannel(data, scale=255, channels=[0,1,2]):
+    data *= scale/data.max()
+    data = data.astype(np.uint8)
+    if len(data.shape) == 2:
+        return data
     else:
-        return pic[:,:,channels]
+        return data[:,:,channels]
+
+def channelToEnd(mat):
+    #(3,x,y) -> (x,y,3)
+    return np.rollaxis(mat, 0, 3)
+
+def channelToHead(mat):
+    #(x,y,3) -> (3,x,y)
+    return np.rollaxis(mat, 2, 0)
 
 def autoLoadPic(fname,channels=[0,1,2]):
     pic = loadPic(fname)
     scaled = getScaleChannel(pic)
-    return np.rollaxis(scaled, 2, 0) #(x,y,3) -> (3,x,y)
+    return channelToHead(scaled)
