@@ -15,3 +15,5 @@ CharPNGLib/
 traindata/
 
 *.DS_Store
+
+*.mdb

@@ -1,0 +1,4 @@
+conclusion:
+
+cuting parameters (*.caffemodel files) is unnecessary.
+caffe can auto match it.

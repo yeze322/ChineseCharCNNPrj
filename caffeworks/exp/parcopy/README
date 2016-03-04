@@ -1,0 +1,5 @@
+experiment content:
+
+1- copy paras from net A to empty net B (A B are in the same structure)
+
+2 - run caffe test on mnist test data, if the accuracy is almost 1, copy para success.
