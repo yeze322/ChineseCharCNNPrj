@@ -8,4 +8,8 @@
 DONE:
 
 - refactoring mergeFontSrc.py (under roor/scripts)
-- 
+- add 3 axis support for dbloader
+
+todo:
+
+error with DB.getindex() fix it 

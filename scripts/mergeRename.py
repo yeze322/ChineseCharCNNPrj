@@ -42,14 +42,15 @@ tuppleList = [\
 bar = pb.ProgressBar(sum([len(i[3]) for i in tuppleList])).start()
 BAR_COUNT = 0
 
+print "Start copy!"
 # start iter
 for subd, font, index, flist in tuppleList:
     for fname in flist:
         # progress bar:
         oldName = subd+'/'+fname
         newName = dstdir+'/'+font+'_'+index+'_'+fname
-        if not os.path.exists(newName):
-            os.system('cp ' + oldName + ' ' + newName)
+        #if not os.path.exists(newName):
+        os.system('cp ' + oldName + ' ' + newName)
         BAR_COUNT += 1
         bar.update(BAR_COUNT)
 

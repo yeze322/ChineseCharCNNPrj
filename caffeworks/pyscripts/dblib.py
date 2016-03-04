@@ -5,20 +5,6 @@ import os
 import piclib
 import flib
 
-def convertStringToTupple(raw_string, dim=2, datum=None):
-	if datum == None:
-		datum = caffe.proto.caffe_pb2.Datum()
-	datum.ParseFromString(raw_string)
-	mat = np.fromstring(datum.data, dtype=np.uint8)
-	if dim == 3:
-		mat = mat.reshape(datum.channels, datum.height, datum.width)
-	elif dim == 2:
-		mat = mat.reshape(datum.height, datum.width)
-	else:
-		raise ValueError("Error, invalid dim")
-		return (None, None)
-	label = datum.label
-	return (mat, label)
 
 # DB operations
 class DB:
@@ -26,15 +12,29 @@ class DB:
 		self.env = lmdb.open(dbname, readonly=not write, map_size=mapsize)
 		self.txn = self.env.begin(write=write)
 		self.cur = self.txn.cursor()
+		
 		self.datum = caffe.proto.caffe_pb2.Datum()
-		self.labelDiction = None
-		if os.path.isfile(dbname+'/labelDiction.pkl'):
-			self.labelDiction = flib.load_obj(dbname+'/labelDiction.pkl')
+		try:
+			self.labelDiction = flib.load_obj(dbname+'/obj/labelDiction.pkl')
+			self.datashape = flib.load_obj(dbname+'/obj/picsize.pkl')
+			self._setDatum()
+			print "Read Mode"
+		except:
+			print "Create Mode..."
 
 	def __del__(self):
 		self.env.close()
 
-	def close():
+	def _setDatum(self):
+		if len(self.datashape) == 2:
+			self.datum.channels = 1
+			self.datum.height, self.datum.width = self.datashape
+		elif len(x.shape) == 3:
+			self.datum.channels,self.datum.height,self.datum.width = self.datashape
+		else:
+			raise Exception('data size error:{}'.format(self.datashape))
+		return
+	def _close():
 		self.env.close()
 		return
 	def saveModify(self):
@@ -43,32 +43,22 @@ class DB:
 	def count(self):
 		return self.env.stat()['entries']
 
+	def _convertString(self, raw_string):
+		self.datum.ParseFromString(raw_string)
+		mat = np.fromstring(datum.data, dtype=np.uint8)
+		mat = mat.reshape(datum.channels, datum.height, datum.width)
+		label = datum.label
+		return (mat, label)
+
 	def getElementTupple(self, index):
 		if index+1 > self.count():
 			raise IndexError('index out of range')
 			return None
 		else:
 			raw_str = self.txn.get('{:08}'.format(index))
-			return convertStringToTupple(raw_str, dim=2, datum=self.datum)
+			return _convertString(raw_str)
 
-	def addData(self, X, label, index, autocommit=False):
-		self.datum.channels = 1
-		self.datum.height = X.shape[0]
-		self.datum.width = X.shape[1]
-		
-		self.datum.data = X.tobytes()
-		self.datum.label = label
-
-		str_id = '{:08}'.format(index)
-		try:
-			self.txn.put(str_id, self.datum.SerializeToString())
-		except:
-			return False
-		if autocommit:
-			self.saveModify()
-		return True
-
-	# tuppleList : (filename, label)
+	# tuppleList : (filename, label), return shape of the data
 	def addTuppleList(self, tplist, startIndex=0, autocommit = True):
 		failCount = 0
 		datum = None
@@ -77,9 +67,7 @@ class DB:
 			# properties only set once
 			if datum == None:
 				datum = caffe.proto.caffe_pb2.Datum()
-				datum.channels = 1
-				datum.width = mat.shape[0]
-				datum.height = mat.shape[1]
+				datum.channels,datum.width,datum.height = mat.shape
 			# edit db data
 			datum.data = mat.tobytes()
 			datum.label = label
@@ -94,13 +82,21 @@ class DB:
 		if autocommit:
 			self.saveModify()
 
-		return 'Input={}; Fail={}'.format(len(tplist), failCount)
+		return mat.shape, startIndex
 
-
-
-
-
-
-
-
+#	def addData(self, X, label, index, autocommit=False):
+#		if self.datum == None:
+#			self._setDatum(X)
+#		
+#		self.datum.data = X.tobytes()
+#		self.datum.label = label
+#
+#		str_id = '{:08}'.format(index)
+#		try:
+#			self.txn.put(str_id, self.datum.SerializeToString())
+#		except:
+#			return False
+#		if autocommit:
+#			self.saveModify()
+#		return True
 

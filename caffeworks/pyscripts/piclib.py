@@ -19,14 +19,15 @@ def savePic(fname, matrix, mode=None):
     img.save(fname)
     return
 
-def getGrayChannel(pic, scale=255, channel=0):
+def getScaleChannel(pic, scale=255, channels=[0,1,2]):
     pic *= scale/pic.max()
     pic = pic.astype(np.uint8)
     if len(pic.shape) == 2:
         return pic
     else:
-        return pic[:,:,channel]
+        return pic[:,:,channels]
 
-def autoLoadPic(fname):
+def autoLoadPic(fname,channels=[0,1,2]):
     pic = loadPic(fname)
-    return getGrayChannel(pic)
+    scaled = getScaleChannel(pic)
+    return np.rollaxis(scaled, 2, 0) #(x,y,3) -> (3,x,y)
