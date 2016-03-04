@@ -3,6 +3,7 @@ import lmdb
 import caffe
 import os
 import piclib
+import flib
 
 def convertStringToTupple(raw_string, dim=2, datum=None):
 	if datum == None:

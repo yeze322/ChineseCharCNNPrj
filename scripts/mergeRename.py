@@ -1,6 +1,7 @@
 # run this script under fontname_(1).jpg.dir
 # you can get a pakaged datalist
 # named in a standard style for trainning char classfier
+# python this [dstdir]
 
 import re
 import os
