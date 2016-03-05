@@ -1,0 +1,14 @@
+fail:
+    caffe in ipynb load stucked! func = load_resources()
+
+progress:
+    solved the bugs.
+    the model can run through.
+    but result is pool
+    try to add some restrict conditions.
+
+guess:
+    too many pixels value is 255 (white), try to reverseit
+
+todo:
+    add a handle for addimg(), such as gaussian / rev / etc.

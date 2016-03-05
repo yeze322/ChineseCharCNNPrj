@@ -61,11 +61,13 @@ class DB:
 			return self._convertString(raw_str)
 
 	# tuppleList : (filename, label), return shape of the data
-	def addTuppleList(self, tplist, startIndex=0, autocommit = True):
+	def addTuppleList(self, tplist, startIndex=0, autocommit = True, reverse=True):
 		failCount = 0
 		datum = None
 		for fname, label in tplist:
 			mat = piclib.autoLoadPic(fname)
+			if reverse:
+				mat = 255 - mat
 			# properties only set once
 			if datum == None:
 				datum = caffe.proto.caffe_pb2.Datum()
