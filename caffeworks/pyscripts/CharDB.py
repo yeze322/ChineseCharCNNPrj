@@ -24,18 +24,18 @@ import logging
 
 RE = flib.RE_CH
 # start main function
-tuppleList, labelDiction = flib.generateFnameLableTuppleList(opt.flistname, labelre=RE)
+tuppleList, labelList = flib.generateFnameLableTuppleList(opt.flistname, labelre=RE)
 
 MAP_SIZE = 1*36*36*len(tuppleList)*20
 
 db = dblib.DB(opt.dbname, write=True, mapsize=MAP_SIZE)
 
-shape, count = db.addTuppleList(tuppleList)
+shape, count = db.addTuppleList(tuppleList, f=piclib.specific_H)
 
 objSavePath = opt.dbname+'/obj/'
 
 if not os.path.exists(objSavePath):
 	os.mkdir(objSavePath)
 
-flib.save_obj(objSavePath+'labelDiction', labelDiction)
+flib.save_obj(objSavePath+'labelDiction', labelList)
 flib.save_obj(objSavePath+'picsize', shape)

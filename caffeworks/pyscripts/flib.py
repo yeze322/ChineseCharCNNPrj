@@ -18,7 +18,8 @@ RE_MNIST = r'.+_([0-9]).png'
 RE_CH = r'.+/([a-z]+)_.+jpg'
 
 def generateFnameLableTuppleList(inputListName, labelre, labelfunc=None, limit=-1, ifshuffle=True):
-    labelDiction = {}
+    labelList = [] # for saving
+
     flist = getlines(inputListName)
     if len(flist) == 0:
         raise Exception('flist is empty')
@@ -30,16 +31,14 @@ def generateFnameLableTuppleList(inputListName, labelre, labelfunc=None, limit=-
 
     for subfname in flist:
         label = re.match(labelre, subfname).groups()[0]
-
-        if label not in labelDiction:
-            if labelfunc == None:
-                labelDiction[label] = labelIndex
-                labelIndex += 1
-            else:
-                labelDiction[label] = labelfunc(label)
-
-        collection.append((subfname.strip(), labelDiction[label]))
+        # check new label, then add it 
+        if label not in labelList:
+            if labelfunc != None:
+                label = labelfunc(label)
+            labelList.append(label)
+            labelIndex += 1
+        collection.append((subfname.strip(), labelList.index(label)))
 
     if ifshuffle:
         np.random.shuffle(collection)
-    return collection, labelDiction
+    return collection, labelList

@@ -19,23 +19,35 @@ def savePic(fname, matrix, mode=None):
     img.save(fname)
     return
 
-def getScaleChannel(data, scale=255, channels=[0,1,2]):
-    data *= scale/data.max()
-    data = data.astype(np.uint8)
-    if len(data.shape) == 2:
-        return data
-    else:
-        return data[:,:,channels]
+#================
+def _scaleIMG(data, MAX=255):
+    if data.max() < 1:
+        data *= MAX/data.max()
+    return data
 
-def channelToEnd(mat):
-    #(3,x,y) -> (x,y,3)
-    return np.rollaxis(mat, 0, 3)
+def _toUint8IMG(data):
+    return data.astype(np.uint8)
 
-def channelToHead(mat):
-    #(x,y,3) -> (3,x,y)
-    return np.rollaxis(mat, 2, 0)
+def _reshapeIMG(data):
+    if data.shape[2] < data.shape[0]:
+        data = data.transpose(2,0,1)
+    return data
 
-def autoLoadPic(fname,channels=[0,1,2]):
-    pic = loadPic(fname)
-    scaled = getScaleChannel(pic)
-    return channelToHead(scaled)
+
+def basicHandler(pic):
+    pic = _scaleIMG(pic)
+    pic = _toUint8IMG(pic)
+    pic = _reshapeIMG(pic)
+    return pic
+    
+def _selectChannel(data, channels=[0,1,2]):
+    return data[channels,:,:]
+
+def _invColor(pic):
+    return 255-pic
+
+def specific_H(pic):
+    pic = basicHandler(pic) #important
+    pic = _selectChannel(pic, [0])
+    pic = _invColor(pic)
+    return pic
