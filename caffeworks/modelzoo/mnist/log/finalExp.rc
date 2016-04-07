@@ -1,0 +1,5 @@
+1 - variables:
+    network model
+    which layer to choose
+    training data's number
+    training data's feature(calculate average distance)

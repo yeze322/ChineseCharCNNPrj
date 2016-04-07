@@ -8,12 +8,15 @@ import matplotlib.pyplot as plt
 
 # DB operations
 class DB:
-	def __init__(self, dbname, write=False, mapsize=99999):
+	def __init__(self, dbname, lead0, write=False, mapsize=99999):
 		self.env = lmdb.open(dbname, readonly=not write, map_size=mapsize)
 		self.txn = self.env.begin(write=write)
 		self.cur = self.txn.cursor()
-		
+		self.leadformat = '{:0'+str(lead0)+'}'
+
 		self.datum = caffe.proto.caffe_pb2.Datum()
+		self.labelList = None
+		self.datashape = None
 		try:
 			self.labelList = flib.load_obj(dbname+'/obj/labelDiction.pkl')
 			print "labelDiction loaded"
@@ -57,7 +60,7 @@ class DB:
 			raise IndexError('index out of range')
 			return None
 		else:
-			raw_str = self.txn.get('{:08}'.format(index))
+			raw_str = self.txn.get(self.leadformat.format(index))
 			return self._convertString(raw_str)
 
 	# tuppleList : (filename, label), return shape of the data
@@ -75,7 +78,7 @@ class DB:
 			datum.data = mat.tobytes()
 			datum.label = label
 			# insert
-			key = '{:08}'.format(startIndex)
+			key = self.leadformat.format(startIndex)
 			try:
 				self.txn.put(key, datum.SerializeToString())
 				startIndex += 1
@@ -92,7 +95,10 @@ class DB:
 			plt.imshow(data[0], cmap='gray')	
 		else:
 			plt.imshow(data.transpose(1,2,0))
-		title = str(self.labelList[label]) + '--' + str(label)
+		if self.labelList == None:
+			title = str(label)
+		else:
+			title = str(self.labelList[label]) + '--' + str(label)
 		plt.title(title)
 		plt.show()
 #	def addData(self, X, label, index, autocommit=False):

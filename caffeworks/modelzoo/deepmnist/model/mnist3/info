@@ -1,0 +1,12 @@
+3 conv:
+    conv1 5x5 pad+1 => 8x28x28
+    pool1 => 14x14
+    conv2 3x3 pad+1 => 16x14x14
+    pool2 => 7x7
+    conv3 2x2 => 32x6x6
+    pool3 => 3x3
+    ip1 => 200
+    ip2 => 10
+
+MAX
+No ReLU

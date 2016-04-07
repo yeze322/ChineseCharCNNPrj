@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import caffe
 import numpy as np
 def pl(img):
-    plt.imshow(img)
+    plt.imshow(img,cmap='gray')
     plt.show()
 
 def sitdown(blobdata):

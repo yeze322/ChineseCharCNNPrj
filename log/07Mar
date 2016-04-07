@@ -1,0 +1,3 @@
+done:
+    - write upwd, dpwd functions for quick chdir
+    - running googlenet demo

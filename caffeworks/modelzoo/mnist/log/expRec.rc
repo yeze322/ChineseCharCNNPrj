@@ -1,0 +1,126 @@
+[GROUP 1]
+====
+//EXP1
+abstract:
+    normal, change weight
+detail:
+    iter = 500
+    m = 10
+    size = 28
+    imagenet_mean = numpy.array([ 0.40760392]) 
+    source_img_name = 'Images/mnist/1010_4.png'
+    init = None
+    tex_layers = ['pool2', 'pool1','conv1']
+    tex_weights = [1e9, 2e9, 5e9]
+
+comment:
+    the digit is very similar to '4'
+    (but the classifier think it's 2)
+
+====
+CONCLUSION:
+    layer weight is useful
+    init pic is useful
+
+====
+//EXP2
+abstract:
+    change init
+
+detail:
+    other same as EXP1, but:
+    initpic = 100_6.png
+
+comment:
+    generate a recoganizable pic '4'
+    mnet classify it to 4
+
+====
+//EXP3
+abstract:
+    check if result is random with initpic
+
+detail:
+    same paras
+    init = initpic(100_6.png)
+
+comment:
+    exp result has been saved to pngs
+    prediction result is 4
+    those pics are almost the same
+
+====
+//EXP4
+abstract:
+    check random whith None init
+detail:
+    init = random init [pare=None, default type is np.random]
+    paras is the same
+
+comment:
+    with init, the result is not random.
+    4 based on 6 got a perfect 4
+====
+//EXP5
+abstract:
+    check random with constant None init
+
+detail:
+    replace init from random to ->  np.zeros()
+    paras is the same
+
+comment:
+    generate '4' which is nearly the same type with input
+    two tests got the same result
+
+====
+//EXP6
+abstract:
+    change the img_size, init = zeros()
+
+detail:
+    change the img_size from 28 to 100
+    init = zeros()
+    other paras are the same    
+
+comment:
+    pixels are hard to be grouped together
+    result is bad
+
+====
+//EXP7
+abstract:
+    change the img_size, init = train pic
+
+detail:
+    1 - init = 100_6
+    2 - init = 1003_5
+
+comment:
+    1 - result can be recoganized by human
+    2 - result is hard to be recoganized
+
+====
+//EXP8
+abstract:
+    use random initpic
+
+detail:
+    initpic = random()
+
+comment:
+    hard to group pixels together
+====
+CONCLUSION:
+    1 - convolution net has restrict: pixels cannot move very far
+    2 - inipic is important for the generation
+    3 - weight is important, higher features are more abstract
+====
+TODO:
+    use mean pooling
+    write automatic scripts for generating digits based each other
+    How to guide the generation from higher layer?
+    add a mutation algo for those pixels too far from the origin
+
+    go deeper into the loss function and modify procedure
+    adjust IF_MASK

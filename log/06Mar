@@ -1,0 +1,7 @@
+how to find out the real path of a imported lib:
+-> import inspect
+-> inspect.getfile(libname)
+
+
+I don't do much work today, cause I took a cardino train this afternoon.
+I want to try more demos, such as google's tensorflow

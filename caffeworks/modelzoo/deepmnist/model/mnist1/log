@@ -1,0 +1,8 @@
+this model has only one convolutional layer
+accuracy is nearly 98
+
+however, the generated result is not very good, the color is so light
+and some number cannot be constructed well
+tommorrow I will write the contrast experiments of convlayer numbers to my paper.
+
+p.s. seems convolutional layer with kernel size 1 works poor for generation
